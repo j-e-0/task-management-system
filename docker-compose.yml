@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+    ws:
+        container_name: ws
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+        volumes:
+            - .:/var/www
+        environment:
+          DB_HOST: ${DB_HOST}
+          DB_PORT:     ${DB_PORT}
+          DB_DATABASE: ${DB_DATABASE}
+          DB_USERNAME: ${DB_USERNAME}
+          DB_PASSWORD: ${DB_PASSWORD}
+        depends_on:
+            - db
+        networks:
+            - ws-network
+
+    db:
+        image: mysql:5.7
+        container_name: ws-mysql-db
+        ports:
+            - "3306:3306"
+        command: --init-file /data/application/init.sql
+        volumes:
+            - ./data/schema.sql:/data/application/init.sql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        env_file:
+            - ./.env
+        networks:
+          - ws-network
+  
+networks:
+  ws-network:
+    driver: bridge
