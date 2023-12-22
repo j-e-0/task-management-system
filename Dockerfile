@@ -8,10 +8,6 @@ RUN a2enmod rewrite \
     && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
     && mv /var/www/html /var/www/public
 
-## Install Composer
-RUN curl -sS https://getcomposer.org/installer \
-  | php -- --install-dir=/usr/local/bin --filename=composer
-
 ###
 ## PHP Extensisons
 ###
@@ -68,17 +64,8 @@ RUN docker-php-ext-install pdo_mysql
 #     && pecl install redis \
 #     && docker-php-ext-enable redis
 
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 WORKDIR /var/www
-
-# Arguments defined in docker-compose.yml
-ARG user=user1
-ARG uid=1000
-
-# Create system user to run Composer
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user 
-
-USER $user
 
 CMD [ "composer", "serve" ]

@@ -15,9 +15,12 @@ The schema Database is on path `/data/schema.sql`, always the container is start
 Build and start the image and container using:
 
 ```bash
-$ docker-compose up -d --build
+$ docker-compose build
+$ docker-compose run ws composer install --ignore-platform-reqs --no-interaction
+$ docker-compose up
 ```
-After build and start de application access:
+
+After build and start the application, access:
 ```
 localhost:8080
 ```

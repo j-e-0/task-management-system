@@ -8,24 +8,26 @@ $this->headTitle($title);
     <a href="<?= $this->url('task', ['action' => 'add']) ?>">Add new task</a>
 </p>
 
-<table class="table">
-<tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Created At</th>
-    <th>Status</th>
-    <th>&nbsp;</th>
-</tr>
-<?php foreach ($tasks as $task) : ?>
+<div class="table-responsive">
+    <table class="table">
     <tr>
-        <td><?= $this->escapeHtml($task->title) ?></td>
-        <td><?= $this->escapeHtml($task->description) ?></td>
-        <td><?= $this->escapeHtml($task->created_at) ?></td>
-        <td><?= $this->escapeHtml($task->status) ?></td>
-        <td>
-            <a href="<?= $this->url('task', ['action' => 'edit', 'id' => $task->id]) ?>">Edit</a>
-            <a href="<?= $this->url('task', ['action' => 'delete', 'id' => $task->id]) ?>">Delete</a>
-        </td>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Created At</th>
+        <th>Status</th>
+        <th>&nbsp;</th>
     </tr>
-<?php endforeach; ?>
-</table>
+    <?php foreach ($tasks as $task) : ?>
+        <tr>
+            <td><?= $this->escapeHtml($task->title) ?></td>
+            <td><?= $this->escapeHtml($task->description) ?></td>
+            <td><?= $this->escapeHtml($task->created_at) ?></td>
+            <td><?= $this->escapeHtml($task->status == 1 ? "Pending" : "Completed") ?></td>
+            <td>
+                <a href="<?= $this->url('task', ['action' => 'edit', 'id' => $task->id]) ?>">Edit</a>
+                <a href="<?= $this->url('task', ['action' => 'delete', 'id' => $task->id]) ?>">Delete</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </table>
+</div>
